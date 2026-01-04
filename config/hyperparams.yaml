@@ -1,0 +1,18 @@
+q_learning:
+  alpha: 0.1
+  gamma: 0.99
+  epsilon_start: 1.0
+  epsilon_end: 0.01
+  epsilon_decay: 0.995
+
+sarsa:
+  alpha: 0.1
+  gamma: 0.99
+  epsilon_start: 1.0
+  epsilon_end: 0.01
+  epsilon_decay: 0.995
+
+training:
+  num_episodes: 5000
+  max_steps: 100
+  eval_frequency: 100
