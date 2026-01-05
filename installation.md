@@ -18,13 +18,6 @@ pip install -r requirements.txt
 python -c "import gymnasium, minigrid, numpy, yaml; print('ok')"
 ```
 
-## Optional: PyTorch for TensorBoard logging
-- The simple logger uses `torch.utils.tensorboard`. Install with:
-```bash
-pip install torch --index-url https://download.pytorch.org/whl/cpu
-```
-- GPU wheels vary by machine; check pytorch.org for the right command.
-
 ## Common issues (Windows)
 - If MiniGrid fails to build, make sure Microsoft C++ Build Tools are installed.
 - Sometimes `gymnasium` extras complain about box2d; not needed here, so you can ignore that warning.
