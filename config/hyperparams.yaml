@@ -1,18 +1,42 @@
 q_learning:
-  alpha: 0.1
+  alpha: 0.2
   gamma: 0.99
   epsilon_start: 1.0
-  epsilon_end: 0.01
-  epsilon_decay: 0.995
+  epsilon_end: 0.05
+  epsilon_decay: 0.9995
 
 sarsa:
-  alpha: 0.1
+  alpha: 0.2
   gamma: 0.99
   epsilon_start: 1.0
-  epsilon_end: 0.01
-  epsilon_decay: 0.995
+  epsilon_end: 0.05
+  epsilon_decay: 0.9995
+
+dqn:
+  gamma: 0.99
+  epsilon_start: 1.0
+  epsilon_end: 0.05
+  epsilon_decay: 0.9997
+  learning_rate: 0.0001
+  batch_size: 32
+  buffer_size: 100000
+  target_update_freq: 1000
+  hidden_sizes: [256, 256]
 
 training:
-  num_episodes: 5000
-  max_steps: 100
+  num_episodes: 20000
+  max_steps: 500
   eval_frequency: 100
+
+reward_shaping:
+  enabled: false
+  door_open_bonus: 0.1
+  new_room_bonus: 0.2
+  step_penalty: -0.001
+
+curriculum:
+  stages:
+    - env: "MiniGrid-MultiRoom-N2-S4-v0"
+      episodes: 3000
+    - env: "MiniGrid-MultiRoom-N4-S5-v0"
+      episodes: 5000
