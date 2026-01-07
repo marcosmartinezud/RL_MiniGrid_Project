@@ -15,15 +15,15 @@ import minigrid  # registers envs
 import numpy as np
 import yaml
 
-from imitation_learning.env_tools import (
+from assisted_learning.env_tools import (
     ACTION_MAP,
     build_state,
     scan_doors,
     shortest_path_length,
 )
-from imitation_learning.expert_planner import ACTION_INDEX, action_from_direction, compute_path_info
-from imitation_learning.evaluate import evaluate_agent
-from imitation_learning.qlearning_agent import QLearningAgent, QLearningConfig
+from assisted_learning.expert_planner import ACTION_INDEX, action_from_direction, compute_path_info
+from assisted_learning.evaluate import evaluate_agent
+from assisted_learning.qlearning_agent import QLearningAgent, QLearningConfig
 from utils import TensorBoardLogger
 
 
@@ -52,7 +52,7 @@ def distance_to_goal(env) -> int:
 
 def default_log_dir() -> pathlib.Path:
     timestamp = dt.datetime.now().strftime("%Y%m%d_%H%M%S")
-    return pathlib.Path("logs") / f"imitation_learning_qlearning_{timestamp}"
+    return pathlib.Path("logs") / f"assisted_learning_qlearning_{timestamp}"
 
 
 def train(config: Dict[str, Any], output_dir: pathlib.Path) -> Dict[str, Any]:

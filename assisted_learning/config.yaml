@@ -2,7 +2,7 @@ env: "MiniGrid-MultiRoom-N4-S5-v0"
 seed: 7
 random_layout: true
 state_mode: "bfs"
-output_dir: "imitation_learning/output"
+output_dir: "assisted_learning/output"
 
 state:
   distance_bucket: 2

@@ -12,9 +12,9 @@ import minigrid
 import numpy as np
 import yaml
 
-from imitation_learning.env_tools import ACTION_MAP, build_state, scan_doors
-from imitation_learning.expert_planner import compute_path_info
-from imitation_learning.qlearning_agent import QLearningAgent, QLearningConfig
+from assisted_learning.env_tools import ACTION_MAP, build_state, scan_doors
+from assisted_learning.expert_planner import compute_path_info
+from assisted_learning.qlearning_agent import QLearningAgent, QLearningConfig
 
 
 def load_config(path: pathlib.Path) -> Dict[str, Any]:
