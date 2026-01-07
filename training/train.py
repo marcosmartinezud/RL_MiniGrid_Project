@@ -215,7 +215,13 @@ def main() -> None:
                     f"Ep {global_episode}/{episodes} | reward={total_reward:.2f} | steps={steps} | epsilon={getattr(agent, 'epsilon', 0.0):.3f}"
                 )
 
-    print("Training done. TODO: implement agent.save() to persist models.")
+    # Save model at the end of training
+    if args.agent == "dqn":
+        model_path = pathlib.Path(log_dir) / "model.pt"
+        agent.save(str(model_path))
+        print(f"Model saved to {model_path}")
+    
+    print("Training done.")
     logger.close()
 
 
