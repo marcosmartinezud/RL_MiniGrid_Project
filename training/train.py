@@ -8,7 +8,7 @@ import pathlib
 from typing import Any, Hashable, Iterable
 
 import gymnasium as gym
-import minigrid  # registers MiniGrid envs with gymnasium
+import minigrid
 import numpy as np
 import yaml
 

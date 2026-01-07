@@ -66,7 +66,7 @@ class SimpleObsWrapper(gym.ObservationWrapper):
         # Agent looks toward increasing x; in the cropped view front is at row 3, col 6
         front = image[3, 6]
         front_type = int(front[0])
-        front_state = int(front[2])  # door state encoded here
+        front_state = int(front[2])
 
         obj_layer = image[:, :, 0]
         goal_visible = bool((obj_layer == 8).any())
@@ -76,11 +76,7 @@ class SimpleObsWrapper(gym.ObservationWrapper):
 
 
 class RewardShapingWrapper(gym.Wrapper):
-    """Add small shaping rewards to ease sparse reward learning.
-
-    Based on the idea from Ng et al. (1999) about potential-based shaping,
-    we provide mild bonuses for opening doors and exploring new areas.
-    """
+    """Add small shaping rewards to ease sparse reward learning."""
 
     def __init__(self, env: gym.Env, config: dict[str, Any]) -> None:
         super().__init__(env)
@@ -103,7 +99,7 @@ class RewardShapingWrapper(gym.Wrapper):
         agent_pos = tuple(self.unwrapped.agent_pos)
         if agent_pos not in self.visited_positions:
             self.visited_positions.add(agent_pos)
-            shaped_reward += 0.01  # tiny exploration boost
+            shaped_reward += 0.01
 
         # Bonus when toggling an unopened door open (action 5 = toggle)
         if action == 5:
@@ -114,10 +110,6 @@ class RewardShapingWrapper(gym.Wrapper):
                 if door_id not in self.doors_opened:
                     self.doors_opened.add(door_id)
                     shaped_reward += self.door_bonus
-
-        # Rough exploration bonus for moving into new cells; could approximate rooms
-        # (We keep it light to avoid overpowering the true goal reward.)
-        # Note: room_bonus retained for future tweaks, not directly used here.
 
         return obs, shaped_reward, terminated, truncated, info
 

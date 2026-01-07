@@ -7,7 +7,7 @@ import time
 from typing import Any, Hashable
 
 import gymnasium as gym
-import minigrid  # registers envs
+import minigrid
 import numpy as np
 
 from agents import DQNAgent, QLearningAgent, SarsaAgent
@@ -74,10 +74,9 @@ def main() -> None:
                 try:
                     agent.load(args.model)
                     print(f"Loaded DQN weights from {args.model}")
-                except Exception as exc:  # pragma: no cover - runtime path
+                except Exception as exc:
                     print(f"Failed to load model: {exc}. Running untrained policy.")
         else:
-            # Tabular agents without saved tables behave randomly
             agent.epsilon = 1.0
 
     print(f"Visualizing agent={args.agent} wrapper={args.wrapper} env={args.env}")
@@ -97,7 +96,6 @@ def main() -> None:
                     action = env.action_space.sample()
                 else:
                     if args.agent == "dqn":
-                        # use training=True to respect epsilon for light exploration
                         action = agent.select_action(
                             state if isinstance(state, np.ndarray) else np.array(state, dtype=np.float32),
                             training=True,

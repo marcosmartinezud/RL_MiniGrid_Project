@@ -1,4 +1,4 @@
-"""Simple TensorBoard logger helper without needing PyTorch."""
+"""TensorBoard logger"""
 
 from __future__ import annotations
 
@@ -17,7 +17,6 @@ class TensorBoardLogger:
     def __init__(self, log_dir: str | pathlib.Path) -> None:
         self.log_dir = pathlib.Path(log_dir)
         self.log_dir.mkdir(parents=True, exist_ok=True)
-        # using raw EventFileWriter to stay dependency-light
         self.writer = EventFileWriter(self.log_dir.as_posix())
         self.success_window: deque[int] = deque(maxlen=100)
 
@@ -41,7 +40,6 @@ class TensorBoardLogger:
         success: bool = False,
         loss: float | None = None,
     ) -> None:
-        # keeping it simple; we can add more metrics later
         self._add_scalar("episode/reward", reward, episode)
         self._add_scalar("episode/steps", steps, episode)
         self._add_scalar("episode/epsilon", epsilon, episode)

@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Any, Dict, Hashable, Tuple
 
 import numpy as np
+import pickle
 
 from .base_agent import BaseAgent
 
@@ -42,7 +43,6 @@ class QLearningAgent(BaseAgent):
     ) -> None:
         self._ensure_state(state)
         self._ensure_state(next_state)
-        # TODO: double-check update rule with teacher
         best_next = np.max(self.q_table[next_state])
         td_target = reward + (0.0 if done else self.gamma * best_next)
         td_error = td_target - self.q_table[state][action]
@@ -50,10 +50,29 @@ class QLearningAgent(BaseAgent):
         if done:
             self.epsilon = max(self.epsilon_min, self.epsilon * self.epsilon_decay)
 
-    def save(self, path: str) -> None:  # type: ignore[override]
-        # TODO: store q_table with numpy.save or pickle
-        raise NotImplementedError("save() not implemented yet")
+    def save(self, path: str) -> None:
+        """Save the Q-table and other relevant parameters to a file."""
+        data = {
+            "q_table": self.q_table,
+            "epsilon": self.epsilon,
+            "alpha": self.alpha,
+            "gamma": self.gamma,
+            "epsilon_min": self.epsilon_min,
+            "epsilon_decay": self.epsilon_decay,
+        }
+        with open(path, "wb") as f:
+            pickle.dump(data, f)
+        print(f"Model saved to {path}")
 
-    def load(self, path: str) -> None:  # type: ignore[override]
-        # TODO: load q_table from disk
-        raise NotImplementedError("load() not implemented yet")
+
+    def load(self, path: str) -> None:
+        """Load the Q-table and parameters from a file."""
+        with open(path, "rb") as f:
+            data = pickle.load(f)
+        self.q_table = data["q_table"]
+        self.epsilon = data["epsilon"]
+        self.alpha = data["alpha"]
+        self.gamma = data["gamma"]
+        self.epsilon_min = data["epsilon_min"]
+        self.epsilon_decay = data["epsilon_decay"]
+        print(f"Model loaded from {path}")

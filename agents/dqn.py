@@ -1,7 +1,4 @@
-"""Deep Q-Network agent for MiniGrid.
-
-Based on Mnih et al. (2015) DQN paper.
-"""
+"""Deep Q-Network agent for MiniGrid."""
 
 from __future__ import annotations
 
@@ -61,7 +58,7 @@ class ReplayBuffer:
         dones = np.array([b.done for b in batch], dtype=np.float32)
         return Transition(states, actions, rewards, next_states, dones)
 
-    def __len__(self) -> int:  # pragma: no cover - trivial
+    def __len__(self) -> int:
         return len(self.buffer)
 
 

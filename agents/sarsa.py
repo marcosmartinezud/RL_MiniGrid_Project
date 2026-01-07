@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Any, Dict, Hashable
 
 import numpy as np
+import pickle
 
 from .base_agent import BaseAgent
 
@@ -53,10 +54,29 @@ class SarsaAgent(BaseAgent):
         if done:
             self.epsilon = max(self.epsilon_min, self.epsilon * self.epsilon_decay)
 
-    def save(self, path: str) -> None:  # type: ignore[override]
-        # TODO: store q_table with numpy.save or pickle
-        raise NotImplementedError("save() not implemented yet")
+    def save(self, path: str) -> None:
+        """Save the Q-table and relevant hyperparameters to a file."""
+        data = {
+            "q_table": self.q_table,
+            "epsilon": self.epsilon,
+            "alpha": self.alpha,
+            "gamma": self.gamma,
+            "epsilon_min": self.epsilon_min,
+            "epsilon_decay": self.epsilon_decay,
+        }
+        with open(path, "wb") as f:
+            pickle.dump(data, f)
+        print(f"SARSA model saved to {path}")
 
-    def load(self, path: str) -> None:  # type: ignore[override]
-        # TODO: load q_table from disk
-        raise NotImplementedError("load() not implemented yet")
+    def load(self, path: str) -> None:
+        """Load the Q-table and hyperparameters from a file."""
+        with open(path, "rb") as f:
+            data = pickle.load(f)
+        self.q_table = data["q_table"]
+        self.epsilon = data["epsilon"]
+        self.alpha = data["alpha"]
+        self.gamma = data["gamma"]
+        self.epsilon_min = data["epsilon_min"]
+        self.epsilon_decay = data["epsilon_decay"]
+        print(f"SARSA model loaded from {path}")
+
