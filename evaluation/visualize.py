@@ -54,7 +54,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Visualize agent behavior with human rendering")
     parser.add_argument("--agent", type=str, choices=["dqn", "qlearning", "sarsa"], default="dqn")
     parser.add_argument("--wrapper", type=str, choices=["dqn", "simple", "position", "flat"], default="dqn")
-    parser.add_argument("--env", type=str, default="MiniGrid-MultiRoom-N2-S4-v0")
+    parser.add_argument("--env", type=str, default="MiniGrid-MultiRoom-N4-S5-v0")
     parser.add_argument("--episodes", type=int, default=5)
     parser.add_argument("--delay", type=float, default=0.1, help="Delay between steps in seconds")
     parser.add_argument("--model", type=str, default=None, help="Path to trained DQN weights")

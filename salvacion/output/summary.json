@@ -1,0 +1,14 @@
+{
+  "episodes_completed": 2000,
+  "success_rate_window": 1.0,
+  "epsilon": 0.05,
+  "model_path": "salvacion/output/q_table.pkl",
+  "log_dir": "logs/salvacion_qlearning_20260107_221616",
+  "shaping_enabled": true,
+  "state_mode": "bfs",
+  "expert_enabled": true,
+  "prefill_steps": 8000,
+  "mix_prob": 1.0,
+  "mix_episodes": 2000,
+  "expert_bonus": 0.0
+}

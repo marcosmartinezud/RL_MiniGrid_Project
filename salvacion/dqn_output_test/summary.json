@@ -1,0 +1,9 @@
+{
+  "episodes_completed": 10,
+  "success_rate_window": 0.0,
+  "epsilon": 0.9995001124850013,
+  "model_path": "salvacion/dqn_output_test/dueling_dqn.pt",
+  "log_dir": "logs/salvacion_dueling_20260107_211256",
+  "random_layout": true,
+  "obs_target_size": 14
+}

@@ -36,7 +36,5 @@ reward_shaping:
 
 curriculum:
   stages:
-    - env: "MiniGrid-MultiRoom-N2-S4-v0"
-      episodes: 3000
     - env: "MiniGrid-MultiRoom-N4-S5-v0"
-      episodes: 5000
+      episodes: 8000

@@ -88,7 +88,7 @@ def default_log_dir(agent: str, curriculum: bool, shaped: bool) -> str:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Train RL agents on MiniGrid MultiRoom")
     parser.add_argument("--agent", type=str, choices=["qlearning", "sarsa", "dqn"], default="qlearning")
-    parser.add_argument("--env", type=str, default="MiniGrid-MultiRoom-N2-S4-v0")
+    parser.add_argument("--env", type=str, default="MiniGrid-MultiRoom-N4-S5-v0")
     parser.add_argument(
         "--config",
         type=str,
