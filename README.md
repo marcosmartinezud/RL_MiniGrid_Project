@@ -1,24 +1,25 @@
 # Reinforcement Learning on MiniGrid MultiRoom
 
-tensorboard --logdir logs --port 6006
+## Entrenamiento rápido (tabular)
+- Q-learning (FullyObs recomendado):
+	`python -m training.train --agent qlearning --env MiniGrid-MultiRoom-N2-S4-v0 --fully-obs --log-dir logs/qlearning_run`
+- SARSA (FullyObs recomendado):
+	`python -m training.train --agent sarsa --env MiniGrid-MultiRoom-N2-S4-v0 --fully-obs --log-dir logs/sarsa_run`
 
-1. Q-learning Vanilla (Baseline)
-python -m training.train --agent qlearning --wrapper simple --episodes 10000
+Usa `--episodes` y `--max-steps` para overrides; el resto de hiperparámetros está en [config/hyperparams.yaml](config/hyperparams.yaml).
 
-2. SARSA Vanilla
-python -m training.train --agent sarsa --wrapper simple --episodes 10000
+## Visualización
+- Q-learning: `python evaluation/visualize.py --agent qlearning --q-table logs/qlearning_run/q_table_final.pkl --fully-obs`
+- SARSA: `python evaluation/visualize.py --agent sarsa --q-table logs/sarsa_run/sarsa_table_final.pkl --fully-obs`
 
-3. Q-learning con Reward Shaping
-python -m training.train --agent qlearning --wrapper simple --episodes 10000 --shaped
+## TensorBoard
+1) Lanza entrenamiento con `--log-dir` (como arriba).
+2) Desde la raíz: `tensorboard --logdir logs --port 6006`
+3) Abre http://localhost:6006 (pestaña Scalars).
 
-4. SARSA con Reward Shaping
-python -m training.train --agent sarsa --wrapper simple --episodes 10000 --shaped
+## DQN
+- `python -m training.train --agent dqn --env MiniGrid-MultiRoom-N2-S4-v0 --wrapper dqn --log-dir logs/dqn_run`
 
-5. Q-learning con Curriculum Learning
-python -m training.train --agent qlearning --wrapper simple --curriculum --shaped
-
-6. Q-learning con PositionAware (falla esperada)
-python -m training.train --agent qlearning --wrapper position --episodes 10000
-
-7. DQN (Solución Final)
-python -m training.train --agent dqn --wrapper dqn --episodes 5000
+Notas:
+- `--shaped` y `--curriculum` aplican solo al pipeline DQN; los tabulares ya incluyen shaping interno.
+- Para semilla fija: añade `--seed 0`.

@@ -10,7 +10,9 @@ import gymnasium as gym
 import minigrid
 import numpy as np
 
-from agents import DQNAgent, QLearningAgent, SarsaAgent
+from agents import DQNAgent
+from agents.q_learning import load_q_table, make_env as make_q_env, render_episode
+from agents.sarsa import render_episode as render_sarsa
 from environments import FlatFloatObsWrapper, FlatObsWrapper, PositionAwareWrapper, SimpleObsWrapper
 
 
@@ -40,13 +42,8 @@ def to_state(obs: Any) -> Hashable:
 
 def build_agent(name: str, state_size: int, action_size: int) -> Any:
     """Instantiate agent with lightweight defaults for inference."""
-    dummy = {"gamma": 0.99}
     if name == "dqn":
         return DQNAgent(state_size, action_size, {"gamma": 0.99, "hidden_sizes": [256, 256]})
-    if name == "qlearning":
-        return QLearningAgent(state_size, action_size, dummy)
-    if name == "sarsa":
-        return SarsaAgent(state_size, action_size, dummy)
     raise ValueError(f"Unsupported agent: {name}")
 
 
@@ -57,11 +54,50 @@ def main() -> None:
     parser.add_argument("--env", type=str, default="MiniGrid-MultiRoom-N2-S4-v0")
     parser.add_argument("--episodes", type=int, default=5)
     parser.add_argument("--delay", type=float, default=0.1, help="Delay between steps in seconds")
+    parser.add_argument("--fully-obs", action="store_true", help="Use FullyObsWrapper for tabular Q-learning")
+    parser.add_argument("--q-table", type=str, default=None, help="Path to a saved Q-table (pickle) for Q-learning")
+    parser.add_argument("--max-steps", type=int, default=None, help="Override max steps per episode")
+    parser.add_argument("--seed", type=int, default=None, help="Environment seed")
     parser.add_argument("--model", type=str, default=None, help="Path to trained DQN weights")
     parser.add_argument("--random", action="store_true", help="Run a random policy for comparison")
     args = parser.parse_args()
 
-    env = make_env(args.env, args.wrapper)
+    if args.agent in {"qlearning", "sarsa"}:
+        fully_obs = args.fully_obs
+        q_table = {}
+
+        if not args.random:
+            probe_env = make_q_env(env_name=args.env, fully_obs=fully_obs)
+            allowed_actions = (0, 1, 2, 5) if fully_obs else tuple(range(probe_env.action_space.n))
+            probe_env.close()
+            if args.q_table:
+                q_table = load_q_table(args.q_table, n_actions=len(allowed_actions))
+                print(f"Loaded Q-table from {args.q_table}")
+            else:
+                print("No Q-table provided; running with an empty table (random actions).")
+        else:
+            print("Random policy enabled; ignoring Q-table path if provided.")
+
+        print(f"Visualizing tabular {args.agent} | env={args.env} | fully_obs={fully_obs}")
+
+        render_fn = render_episode if args.agent == "qlearning" else render_sarsa
+
+        try:
+            for ep in range(1, args.episodes + 1):
+                render_fn(
+                    q_table,
+                    fully_obs=fully_obs,
+                    max_steps_override=args.max_steps,
+                    seed=args.seed,
+                    env_name=args.env,
+                )
+                if args.delay > 0:
+                    time.sleep(args.delay)
+        except KeyboardInterrupt:
+            print("Visualization interrupted by user (Ctrl+C). Closing.")
+        return
+
+    env = make_env(args.env, args.wrapper, max_steps=args.max_steps or 500)
     state_size = env.observation_space.shape[0]
     action_size = env.action_space.n
 
@@ -84,7 +120,7 @@ def main() -> None:
 
     try:
         for ep in range(1, args.episodes + 1):
-            obs, _ = env.reset()
+            obs, _ = env.reset(seed=args.seed)
             state = to_state(obs)
             done = False
             steps = 0

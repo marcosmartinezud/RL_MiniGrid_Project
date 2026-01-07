@@ -1,7 +1,12 @@
-minigrid>=2.3.1
-gymnasium>=0.29.0
-numpy>=1.24.0
 tensorboard>=2.15.0
+gymnasium>=0.29.0
+minigrid>=2.3.1
+numpy>=1.24.0
 pyyaml>=6.0
 matplotlib>=3.7.0
-torch>=2.0.0
+
+# PyTorch bundles SummaryWriter (used for logging); install the CPU wheel by default.
+torch>=2.1.0
+
+# TensorBoard is required for both torch.utils.tensorboard and the custom logger.
+tensorboard>=2.15.0
